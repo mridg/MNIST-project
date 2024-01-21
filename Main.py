@@ -23,26 +23,18 @@ def forwardprop(A):
 
     return z1, z2
 
-def backprop():
-    pass
+def backprop(w1, w2, b1, b2, z1, z2, input, ans, learningrate):
+    dw2 = z1 * sigmoidprime(z2) * 2 * (z2 - ans)
+    db2 = 1 * sigmoidprime(z2) * 2 * (z2 - ans)
 
-def backwardpropv1(w2, i, z1, z2, key):
-    m = len(z2)
-    dz2 = z2 - key.T
-    print(dz2.shape)
-    dw2 =  1 / m * dz2.dot(z1.T)
-    print(dw2.shape)
-    db2 = 1 / m * np.sum(dz2, axis=1)
-    print(db2.shape)
+    w2f = w2 - learningrate * dw2
+    b2f = b2 - learningrate * db2
 
-    dz1 = ((w2).dot(dz2)).dot(sigmoidprime(z1).T) #this shape is supposed to be 10x42000
-    print(dz1.shape)
-    dw1 = 1 #1 / m * dz1.dot(i.T)
-    #print(dw1.shape)
-    db1 = 1 #1 / m & np.sum(dz1, axis=0)
-    #print(db1.shape)
+    dw1 = input * sigmoidprime(z1) * 2 * (w2 - w2f) #not sure check math on this 
+    db1 = 1 * sigmoidprime(z1) * 2 * (b2 - b2f) #check math not sure 
 
-    return dw1, db1, dw2, db2
+    w1f = w1 - learningrate * dw1
+    b1f = b1 - learningrate * db1
 
 def ReLU(input):
     return np.maximum(0, input)
@@ -55,7 +47,6 @@ def sigmoidprime(input):
 
 def checkanswer():
     pass
-
 
 def main():
     """Write your mainline logic below this line (then delete this line)."""
