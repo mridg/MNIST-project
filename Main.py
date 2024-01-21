@@ -18,15 +18,15 @@ def setup():
 
 def forwardprop(A):
     w1, b1, w2, b2 = setup()
-    z1 = ReLU(w1 * A + b1)
-    print(z1.shape)
+    z1 = ReLU(np.matmul(w1, A) + b1)
+    z2 = sigmoid(np.matmul(w2, z1) + b2)
 
-    #z2 = w2 * z1 + b2
-    #z2 = sigmoid(z2)
+    return z1, z2
 
-    return z1 #, z2
+def backprop():
+    pass
 
-def backwardprop(w2, i, z1, z2, key):
+def backwardpropv1(w2, i, z1, z2, key):
     m = len(z2)
     dz2 = z2 - key.T
     print(dz2.shape)
@@ -61,14 +61,28 @@ def main():
     """Write your mainline logic below this line (then delete this line)."""
     data = pd.read_csv("train.csv")
     data = np.array(data) #turns any array like object into an array! how wonderful! I want a greasy almond sandwich
-    data = data.T #transpose to be in the correct form,so now the first row is all the answers
+    #data = data.T #transpose to be in the correct form,so now the first row is all the answers
     #print(data)
 
-    print(data[0][1].shape)
-    #for i in range(len(data)):
-        #forwardprop(data[i])
-        # z1, z2 = forwardprop(i)
-        # print(z2)
+    #print(data.shape)
+
+    for i in range(10):
+        input = np.delete(data[i].T , 0,  axis=0) #initial greyscale inputs
+
+        ans = np.zeros(10)
+        ans[data[i][0]] = 1 #answer array for checking our results 
+
+        #print(input.size)
+        print(forwardprop(input))
+
+
+
+        
+
+    # for i in range(len(data)):
+    #     forwardprop(data[i])
+    #     z1, z2 = forwardprop(i)
+    #     print(z2)
 
 
 
