@@ -2,11 +2,6 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-
-# def forwardprop(weight, bias, input):
-#     z = weight.dot(input) + bias # issue with the dot product
-#     z = ReLU(z)
-#     return z
 def setup():
     # first layer
     w1 = np.zeros((10, 784))
@@ -26,6 +21,10 @@ def forwardprop(w1, b1, w2, b2, A):
     z2 = sigmoid(np.matmul(w2, z1) + b2) #10 row 1 col
 
     return z1, z2
+
+#TODO: check if the code still work when the matrix dimensions change 
+#TODO: check if adding more layers will help !! unlikely but see what it does 
+#TODO: fun experiment, try learning rate scheduling
 
 def backprop(w1, w2, b1, b2, z1, z2, input, ans, learningrate):
     dw2 = np.matmul(np.matmul(z1, sigmoidprime(z2).T), (z2 - ans)) * 2 #10 row 1 col
@@ -59,7 +58,6 @@ def accuracy(z2, answer, correct):
     ans = np.argmax(answer)
     if guess == ans:
         correct += 1
-    
     return correct
 
 def main():
@@ -76,7 +74,6 @@ def main():
     # plt.plot(xpoints, ypoints)
     # plt.show()
 
-
     w1, b1, w2, b2 = setup() 
     for i in range(len(data)):
         reading = np.delete(data[i].T , 0,  axis=0) #initial greyscale inputs
@@ -89,9 +86,10 @@ def main():
         w1, b1, w2, b2 = backprop(w1, w2, b1, b2, z1, z2, input, ans, learningrate) 
 
         correct = accuracy(z2, ans, correct)
-        precent = correct / (i + 1) * 100
         if i % 1000 == 0:
+            precent = correct / (1000) * 100
             print(f"Iteration {i} Accuracy is {precent:0.2f}%")
+            correct = 0 
 
 if __name__ == "__main__":
     main()
